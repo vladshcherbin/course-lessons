@@ -1,0 +1,24 @@
+name: Lint
+on:
+  pull_request:
+    branches: master
+    paths-ignore: '*'
+jobs:
+  find-changed-projects:
+    name: Find changed projects
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get changed projects
+        uses: tj-actions/changed-files@v45
+        id: changed-projects
+        with:
+          dir_names: true
+          dir_names_exclude_current_dir: true
+          dir_names_max_depth: 1
+          matrix: true
+      - name: List all changed projects
+        run: echo '${{ steps.changed-projects.outputs.all_changed_files }}'
+    outputs:
+      changed-projects: ${{ steps.changed-projects.outputs.all_changed_files }}
